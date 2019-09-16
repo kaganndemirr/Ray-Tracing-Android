@@ -18,30 +18,30 @@ class Triangle: Shape{
     }
 
     override fun intersect(ro: Vertex, rd: Vertex): Double{
-        val normal: Vertex = (v1.subs(v0)).crossProduct(v2.subs(v0))
+        val normal: Vertex = (v1 - v0).crossProduct(v2 - v0)
         val r: Vertex
         val s: Double
         val s1: Double
         val s2: Double
         val s3: Double
 
-        val d: Double = -(normal.mul(v0))
-        val t: Double = -(normal.mul(ro.add(d))) / (normal.mul(rd))
+        val d: Double = -(normal * v0)
+        val t: Double = -(normal * (ro + d)) / (normal * rd)
 
         if(t > 0){
-            r = ro.add(rd.mul(t))
+            r = ro + (rd * t)
 
-            s  = (v1.subs(v0)).crossProduct(v2.subs(v0)).length()
-            s1 = (r.subs(v0)).crossProduct(v2.subs(v0)).length()
-            s2 = (v1.subs(v0)).crossProduct(r.subs(v0)).length()
-            s3 = (v1.subs(r)).crossProduct(v2.subs(r)).length()
+            s  = (v1 - v0).crossProduct(v2 - v0).length()
+            s1 = (r - v0).crossProduct(v2 - v0).length()
+            s2 = (v1 - v0).crossProduct(r - v0).length()
+            s3 = (v1 - r).crossProduct(v2 - r).length()
 
-            val difference: Double = abs(s - (s1 + s2 + s3))
+            val difference = abs(s - (s1 + s2 + s3))
             val epsilon = 0.005
 
-            when(difference <= epsilon){
-                true -> return t
-                false -> return 0.0
+            return when(difference <= epsilon){
+                true -> t
+                false -> 0.0
             }
         }
         else

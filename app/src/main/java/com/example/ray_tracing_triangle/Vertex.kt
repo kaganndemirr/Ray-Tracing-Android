@@ -3,9 +3,9 @@ package com.example.ray_tracing_triangle
 import kotlin.math.sqrt
 
 class Vertex(x: Double, y: Double, z: Double){
-    private var x: Double = x
-    private var y: Double = y
-    private var z: Double = z
+    private var x = x
+    private var y = y
+    private var z = z
 
     fun normalize(): Vertex{
         val length: Double = sqrt(x * x + y * y + z * z)
@@ -23,27 +23,27 @@ class Vertex(x: Double, y: Double, z: Double){
         return Vertex(y * v.z - z * v.y,z * v.x - x * v.z,x * v.y - y * v.x)
     }
 
-    fun add(v: Vertex): Vertex{
+    operator fun plus(v: Vertex): Vertex{
         return Vertex(x + v.x, y + v.y, z + v.z)
     }
 
-    fun add(d: Double): Vertex{
+    operator fun plus(d: Double): Vertex{
         return Vertex(x + d, y + d, z + d)
     }
 
-    fun subs(v: Vertex): Vertex{
+    operator fun minus(v: Vertex): Vertex{
         return Vertex(x - v.x, y - v.y, z - v.z)
     }
 
-    fun mul(v: Vertex): Double{
+    operator fun times(v: Vertex): Double{
         return x * v.x +y * v.y + z * v.z
     }
 
-    fun mul(d: Double): Vertex{
+    operator fun times(d: Double): Vertex{
         return Vertex(x * d, y * d, z * d)
     }
 
-    fun div(d: Double): Vertex{
+    operator fun div(d: Double): Vertex{
         return Vertex(x / d, y / d, z / d)
     }
 }

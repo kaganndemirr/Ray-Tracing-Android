@@ -44,6 +44,11 @@ class MainActivity : AppCompatActivity() {
 
         return Color.BLACK.toColor()
 
+        /*return when(rd.y < 0){
+            true -> Color.RED.toColor()
+            false -> Color.BLUE.toColor()
+        }*/
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             for (x in 0..799){
                 for (y in 0..449){
                     val pixel = Vertex(16 * x / 799.0 - 8, 4.5 - y * 9 / 449.0, 10.0)
-                    val rd = (pixel.subs(camera)).normalize()
+                    val rd = (pixel - camera).normalize()
                     val c: Color = traceRay(camera, rd, shapes)
                     surface.setPixel(x, y, c.toArgb())
                 }

@@ -5,5 +5,5 @@ import android.graphics.Color
 abstract class Shape{
     lateinit var shapeColor: Color
 
-    abstract fun intersect(rO: Vertex, rd: Vertex): Double
+    abstract fun intersect(ro: Vertex, rd: Vertex): Double
 }
