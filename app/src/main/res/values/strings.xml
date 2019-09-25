@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Ray Tracing</string>
+    <string name="renderTButton">Render Triangle</string>
+</resources>
