@@ -1,8 +1,6 @@
 package com.kaganndemirr.raytracing
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.BitmapRegionDecoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.graphics.Color
@@ -58,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         val rtImageView: ImageView = findViewById(R.id.rtImageView)
 
         renderTButton.setOnClickListener {
-            val surface: Bitmap = Bitmap.createBitmap(800, 450, Bitmap.Config.RGB_565)
+            val surface: Bitmap = Bitmap.createBitmap(800, 450, Bitmap.Config.ARGB_8888)
             rtImageView.setImageBitmap(surface)
 
 
