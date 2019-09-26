@@ -44,19 +44,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            //return shapes[minIndices].shapeColor
+            return shapes[minIndices].shapeColor
         }
 
-        if(rd.x == 30.0 && rd.y == 40.0)
-            return Color.BLACK.toColor()
-
-
         return Color.BLACK.toColor()
-
-        /*return if(rd.x < 0)
-            Color.RED.toColor()
-        else
-            Color.GREEN.toColor()*/
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

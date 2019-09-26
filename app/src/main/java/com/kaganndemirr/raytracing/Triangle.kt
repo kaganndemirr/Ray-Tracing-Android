@@ -27,11 +27,11 @@ class Triangle: Shape
         val s3: Double
 
         val d: Double = -(normal * v0)
-        val t: Double = -(normal * (ro + d)) / (normal * rd)
+        val t: Double = -(normal * ro + d) / (normal * rd)
 
         if (t > 0)
         {
-            r = ro + (rd * t)
+            r = ro + rd * t
 
             s = (v1 - v0).crossProduct(v2 - v0).length()
             s1 = (r - v0).crossProduct(v2 - v0).length()

@@ -24,10 +24,6 @@ class Vertex(public var x: Double, public var y: Double, private var z: Double) 
         return Vertex(x + v.x, y + v.y, z + v.z)
     }
 
-    operator fun plus(d: Double): Vertex {
-        return Vertex(x + d, y + d, z + d)
-    }
-
     operator fun minus(v: Vertex): Vertex {
         return Vertex(x - v.x, y - v.y, z - v.z)
     }
