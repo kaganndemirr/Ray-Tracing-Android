@@ -39,4 +39,8 @@ class Vertex(public var x: Double, public var y: Double, private var z: Double) 
     operator fun div(d: Double): Vertex {
         return Vertex(x / d, y / d, z / d)
     }
+
+    fun  mul(d: Double): Vertex{
+        return Vertex(x * d, y * d, z * d)
+    }
 }
