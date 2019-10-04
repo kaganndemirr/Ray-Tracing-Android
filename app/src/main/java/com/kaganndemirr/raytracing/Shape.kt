@@ -1,6 +1,6 @@
 package com.kaganndemirr.raytracing
 
-import android.graphics.Color;
+import android.graphics.Color
 
 abstract class Shape {
     lateinit var shapeColor: Color

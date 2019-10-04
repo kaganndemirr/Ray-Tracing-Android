@@ -4,25 +4,26 @@ import android.graphics.Color
 
 import kotlin.math.abs
 
-class V2Triangle: V2Shape {
+class ReflectionTriangle: ReflectionShape
+{
     private val v0: Vertex
     private val v1: Vertex
     private val v2: Vertex
 
-    constructor(v0: Vertex, v1: Vertex, v2: Vertex, ambient: Double, dif: Double,
-                spec: Double, refl: Double, shapeColor: Color)
-    {
+    constructor(v0: Vertex, v1: Vertex, v2: Vertex, ambient: Double, diffuse: Double,
+                specular: Double, reflection: Double, shapeColor: Color){
         this.v0 = v0
         this.v1 = v1
         this.v2 = v2
         this.ambient = ambient
-        this.dif = dif
-        this.spec = spec
-        this.refl = refl
+        this.diffuse = diffuse
+        this.specular = specular
+        this.reflection = reflection
         this.shapeColor = shapeColor
     }
 
-    override fun intersect(ro: Vertex, rd: Vertex): Double {
+    override fun intersect (ro: Vertex, rd: Vertex): Double
+    {
         val normal: Vertex = (v1 - v0).crossProduct(v2 - v0)
         val r: Vertex
         val s: Double
@@ -33,7 +34,8 @@ class V2Triangle: V2Shape {
         val d: Double = -(normal * v0)
         val t: Double = -(normal * ro + d) / (normal * rd)
 
-        if (t > 0) {
+        if (t > 0)
+        {
             r = ro + rd * t
 
             s = (v1 - v0).crossProduct(v2 - v0).length()
@@ -48,11 +50,13 @@ class V2Triangle: V2Shape {
                 t
             } else
                 0.0
-        } else
+        }
+
+        else
             return 0.0
     }
 
-    override fun normalAt(p: Vertex): Vertex {
+    override fun normalAt(v: Vertex): Vertex{
         return (v1 - v0).crossProduct(v2 - v0)
     }
 }

@@ -1,9 +1,1 @@
-<resources>
-    <string name="app_name">Ray Tracing</string>
-    <string name="renderTButton">Render Triangle</string>
-    <string name="welcome_text" translatable="false" />
-    <string name="t_button">Triangle</string>
-    <string name="renderSButton">Render</string>
-    <string name="sButton">Sphere</string>
-    <string name="renderRTButton" />
-</resources>
+<resources></resources>

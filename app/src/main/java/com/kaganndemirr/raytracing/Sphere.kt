@@ -19,13 +19,18 @@ class Sphere: Shape{
         val s = l * rd
         val l2 = l * l
         val r2 = radius * radius
+
         if (s < 0 && l2 > r2)
             return 0.0
+
         val s2 = s * s
         val m2 = l2 - s2
+
         if (m2 > r2)
             return 0.0
+
         val q = sqrt(r2 - m2)
+
         return if (l2 > r2)
             s - q
         else

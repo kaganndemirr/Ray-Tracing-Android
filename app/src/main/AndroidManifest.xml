@@ -21,7 +21,7 @@
         </activity>
         <activity android:name=".TriangleActivity"/>
         <activity android:name=".SphereActivity"/>
-        <activity android:name=".ReflectionTriangleActivity"/>
+        <activity android:name=".ReflectionActivity"/>
     </application>
 
 </manifest>
