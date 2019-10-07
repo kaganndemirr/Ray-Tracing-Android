@@ -5,13 +5,13 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/sphereImageView"
+        android:id="@+id/shadowImageView"
         android:layout_width="800px"
         android:layout_height="450px"
         android:layout_centerHorizontal="true"/>
 
     <Button
-        android:id="@+id/sphereRenderButton"
+        android:id="@+id/shadowRenderButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Render"
@@ -22,7 +22,7 @@
         android:id="@+id/elapsedTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sphereRenderButton"
+        android:layout_below="@id/shadowRenderButton"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>
 </RelativeLayout>

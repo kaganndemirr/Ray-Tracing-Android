@@ -4,12 +4,12 @@ import android.app.Activity
 import android.os.Bundle
 import android.widget.Button
 import android.content.Intent
-import android.view.View
 import android.widget.TextView
 
 import com.kaganndemirr.sphere.SphereActivity
 import com.kaganndemirr.triangle.TriangleActivity
 import com.kaganndemirr.reflection.ReflectionActivity
+import com.kaganndemirr.shadow.ShadowActivity
 import com.kaganndemirr.transparency.TransparencyActivity
 
 
@@ -25,6 +25,7 @@ class MainActivity : Activity() {
         val sphereButton = findViewById<Button>(R.id.sphereButton)
         val reflectionButton = findViewById<Button>(R.id.reflectionButton)
         val transparencyButton = findViewById<Button>(R.id.transparencyButton)
+        val shadowButton = findViewById<Button>(R.id.shadowButton)
 
 
         welcomeText.text = "Listeden Birini Seçiniz!"
@@ -46,6 +47,11 @@ class MainActivity : Activity() {
 
         transparencyButton.setOnClickListener {
             val intent = Intent(this, TransparencyActivity::class.java)
+            startActivity(intent)
+        }
+
+        shadowButton.setOnClickListener {
+            val intent = Intent(this, ShadowActivity::class.java)
             startActivity(intent)
         }
     }

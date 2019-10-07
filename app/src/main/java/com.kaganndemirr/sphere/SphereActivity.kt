@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.graphics.Color
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.graphics.toColor
 
 import com.kaganndemirr.raytracing.R
@@ -56,8 +57,11 @@ class SphereActivity: Activity(){
 
         val sphereRenderButton: Button = findViewById(R.id.sphereRenderButton)
         val sphereImageView: ImageView = findViewById(R.id.sphereImageView)
+        val elapsedTimeTextView = findViewById<TextView>(R.id.elapsedTimeTextView)
 
         sphereRenderButton.setOnClickListener {
+            val startTime = System.currentTimeMillis()
+
             val surface: Bitmap = Bitmap.createBitmap(800, 450, Bitmap.Config.ARGB_8888)
             sphereImageView.setImageBitmap(surface)
 
@@ -73,6 +77,10 @@ class SphereActivity: Activity(){
                     surface.setPixel(x, y, c.toArgb())
                 }
             }
+
+            val endTime = System.currentTimeMillis()
+
+            elapsedTimeTextView.text = (endTime - startTime).toString() + " milisaniye."
         }
     }
 }

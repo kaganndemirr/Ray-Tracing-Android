@@ -5,8 +5,10 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.graphics.Color
+import android.provider.ContactsContract
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.graphics.toColor
 
 import com.kaganndemirr.raytracing.R
@@ -57,8 +59,11 @@ class TriangleActivity : Activity() {
 
         val renderTriangleButton: Button = findViewById(R.id.triangleRenderButton)
         val triangleImageView: ImageView = findViewById(R.id.triangleImageView)
+        val elapsedTimeTextView = findViewById<TextView>(R.id.elapsedTimeTextView)
 
         renderTriangleButton.setOnClickListener {
+            val startTime = System.currentTimeMillis()
+
             val surface: Bitmap = Bitmap.createBitmap(800, 450, Bitmap.Config.ARGB_8888)
             triangleImageView.setImageBitmap(surface)
 
@@ -94,6 +99,10 @@ class TriangleActivity : Activity() {
                     surface.setPixel(x, y, c.toArgb())
                 }
             }
+
+            val endTime = System.currentTimeMillis()
+
+            elapsedTimeTextView.text = (endTime - startTime).toString() + " milisaniye."
 
         }
     }

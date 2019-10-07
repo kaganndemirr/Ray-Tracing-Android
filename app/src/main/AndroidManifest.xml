@@ -12,5 +12,6 @@
         <activity android:name="com.kaganndemirr.sphere.SphereActivity"></activity>
         <activity android:name="com.kaganndemirr.reflection.ReflectionActivity"></activity>
         <activity android:name="com.kaganndemirr.transparency.TransparencyActivity"></activity>
+        <activity android:name="com.kaganndemirr.shadow.ShadowActivity"></activity>
     </application>
 </manifest>

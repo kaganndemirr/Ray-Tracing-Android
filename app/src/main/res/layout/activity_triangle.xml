@@ -17,4 +17,12 @@
         android:text="Render"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/elapsedTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/triangleRenderButton"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

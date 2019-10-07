@@ -1,4 +1,4 @@
-package com.kaganndemirr.transparency
+package com.kaganndemirr.shadow
 
 import android.app.Activity
 import android.graphics.Bitmap
@@ -16,7 +16,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 
-class TransparencyActivity: Activity(){
+class ShadowActivity: Activity(){
 
     private fun shadeDiffuse(s: Shape, iPoint: Vertex): Color {
         val light = Vertex(0.0, 30.0, 60.0)
@@ -121,14 +121,14 @@ class TransparencyActivity: Activity(){
     }
 
     private fun shadingModel(s: Shape, diffuseColor: Color, specularColor: Color, reflectedColor: Color,
-                             transmittedColor: Color, ambient: Double, diffuse: Double, specular: Double,
-                             reflection: Double, transmitted: Double): Color
+                             transmittedColor: Color, refractionColor: Color, ambient: Double, diffuse: Double, specular: Double,
+                             reflection: Double, transmitted: Double, refraction: Double): Color
     {
         val ambientColor = s.shapeColor
 
-        val r = min(255.0, ambient * ambientColor.red() + diffuse * diffuseColor.red() + specular * specularColor.red() + reflection * reflectedColor.red() + transmitted * transmittedColor.red())
-        val g = min(255.0, ambient * ambientColor.green() + diffuse * diffuseColor.green() + specular * specularColor.green() + reflection * reflectedColor.green() + transmitted * transmittedColor.green())
-        val b = min(255.0, ambient * ambientColor.blue() + diffuse * diffuseColor.blue() + specular * specularColor.blue() + reflection * reflectedColor.blue() + transmitted * transmittedColor.blue())
+        val r = min(255.0, ambient * ambientColor.red() + diffuse * diffuseColor.red() + specular * specularColor.red() + reflection * reflectedColor.red() + transmitted * transmittedColor.red() + refraction * refractionColor.red())
+        val g = min(255.0, ambient * ambientColor.green() + diffuse * diffuseColor.green() + specular * specularColor.green() + reflection * reflectedColor.green() + transmitted * transmittedColor.green() + refraction * refractionColor.green())
+        val b = min(255.0, ambient * ambientColor.blue() + diffuse * diffuseColor.blue() + specular * specularColor.blue() + reflection * reflectedColor.blue() + transmitted * transmittedColor.blue() + refraction * refractionColor.blue())
 
         return Color.valueOf(r.toFloat(), g.toFloat(), b.toFloat())
     }
@@ -143,6 +143,52 @@ class TransparencyActivity: Activity(){
         return rd
     }
 
+    private fun calculateRefraction(s: Shape, iPoint: Vertex, rd: Vertex,  n1: Double, n2: Double): Vertex{
+        val normal = s.normalAt(iPoint).normalize()
+        val r = n1 / n2
+        val w = -(rd * normal) * r
+        val k = sqrt(1 + (w - r) * (w + r))
+
+        return (rd * r + normal * (w - k)).normalize()
+    }
+
+    val intersection = Intersection()
+
+    private fun testShadow(shapes: ArrayList<Shape>, iPoint: Vertex): Boolean {
+        val light = Vertex(0.0, 30.0, 40.0)
+        val toLight = (light - iPoint).normalize()
+
+        val intersections: ArrayList<Intersection> = ArrayList()
+
+        for (i in 0 until shapes.size) {
+            val t = shapes[i].intersect(iPoint, toLight)
+
+            if (t > 0.1) {
+                intersection.distance = t
+                intersection.indices = i
+
+                intersections.add(intersection)
+            }
+        }
+
+        if (intersections.size > 0) {
+            var minDistance = Double.MAX_VALUE
+            var minIndices = -1
+
+            for (i in 0 until intersections.size) {
+                if (intersections[i].distance < minDistance) {
+                    minIndices = intersections[i].indices
+                    minDistance = intersections[i].distance
+                }
+            }
+
+            return minDistance < (light - iPoint).length()
+        }
+
+        else
+            return false
+    }
+
     private fun traceRay(ro: Vertex, rd: Vertex, shapes: ArrayList<Shape>, camera: Vertex,
                          depth: Int, prevShape: Shape?): Color {
         if (depth > 4)
@@ -150,7 +196,6 @@ class TransparencyActivity: Activity(){
                 return prevShape.shapeColor
             }
 
-        val intersection = Intersection()
         val intersections: ArrayList<Intersection> = ArrayList()
 
         for (i in 0 until shapes.size) {
@@ -178,6 +223,13 @@ class TransparencyActivity: Activity(){
             val iPoint = ro + rd * minDistance
             val s = shapes[minIndices]
 
+            if(testShadow(shapes, iPoint)){
+                return shadingModel(s, Color.BLACK.toColor(), Color.BLACK.toColor(), Color.BLACK.toColor(),
+                    Color.BLACK.toColor(), Color.BLACK.toColor(), s.ambient, s.diffuse, s.specular,
+                    s.reflection, s.transmitted, s.refraction
+                )
+            }
+
             var reflectedColor = Color.BLACK.toColor()
             if (s.reflection != 0.0) {
                 val reflectedDirection = calculateReflection(s, iPoint, rd)
@@ -191,6 +243,12 @@ class TransparencyActivity: Activity(){
                     traceRay(iPoint, transmittedDirection, shapes, camera, depth + 1, s)
             }
 
+            var refractedColor = Color.BLACK.toColor()
+            if(s.refraction != 0.0){
+                val refractedDirection = calculateRefraction(s, iPoint, rd, 1.0, 1.33)
+                refractedColor = traceRay(iPoint, refractedDirection, shapes, camera, depth + 1, s)
+            }
+
             val diffuseColor = shadeDiffuse(s, iPoint)
             val specularColor = shadeSpecular(s, iPoint, camera)
 
@@ -200,37 +258,40 @@ class TransparencyActivity: Activity(){
                 specularColor,
                 reflectedColor,
                 transmittedColor,
+                refractedColor,
                 s.ambient,
                 s.diffuse,
                 s.specular,
                 s.reflection,
-                s.transmitted
+                s.transmitted,
+                s.refraction
             )
         }
         return Color.BLACK.toColor()
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_transparency)
+        setContentView(R.layout.activity_shadow)
 
-        val transparencyRenderButton = findViewById<Button>(R.id.transparencyRenderButton)
-        val transparencyImageView = findViewById<ImageView>(R.id.transparencyImageView)
+        val startTime = System.currentTimeMillis()
+
+        val shadowRenderButton = findViewById<Button>(R.id.shadowRenderButton)
+        val shadowImageView = findViewById<ImageView>(R.id.shadowImageView)
         val elapsedTimeTextView = findViewById<TextView>(R.id.elapsedTimeTextView)
 
-        transparencyRenderButton.setOnClickListener {
-            val startTime = System.currentTimeMillis()
-
+        shadowRenderButton.setOnClickListener {
             val surface = Bitmap.createBitmap(800, 450, Bitmap.Config.ARGB_8888)
-            transparencyImageView.setImageBitmap(surface)
+            shadowImageView.setImageBitmap(surface)
 
+            //Room
             val t1 = Triangle(
                 Vertex(60.0, -40.0, 120.0),
                 Vertex(-60.0, -40.0, 120.0),
                 Vertex(-60.0, 40.0, 120.0),
                 0.3,
                 0.7,
+                0.0,
                 0.0,
                 0.0,
                 Color.WHITE.toColor()
@@ -244,6 +305,7 @@ class TransparencyActivity: Activity(){
                 0.7,
                 0.0,
                 0.0,
+                0.0,
                 Color.WHITE.toColor()
             )
 
@@ -253,6 +315,7 @@ class TransparencyActivity: Activity(){
                 Vertex(60.0, -40.0, 120.0),
                 0.3,
                 0.7,
+                0.0,
                 0.0,
                 0.0,
                 Color.WHITE.toColor()
@@ -266,6 +329,7 @@ class TransparencyActivity: Activity(){
                 0.7,
                 0.0,
                 0.0,
+                0.0,
                 Color.WHITE.toColor()
             )
 
@@ -275,6 +339,7 @@ class TransparencyActivity: Activity(){
                 Vertex(60.0, 40.0, 0.0),
                 0.7,
                 0.5,
+                0.0,
                 0.0,
                 0.0,
                 Color.WHITE.toColor()
@@ -288,6 +353,7 @@ class TransparencyActivity: Activity(){
                 0.5,
                 0.0,
                 0.0,
+                0.0,
                 Color.WHITE.toColor()
             )
 
@@ -297,6 +363,7 @@ class TransparencyActivity: Activity(){
                 Vertex(60.0, -40.0, 0.0),
                 0.3,
                 0.7,
+                0.0,
                 0.0,
                 0.0,
                 Color.WHITE.toColor()
@@ -310,6 +377,7 @@ class TransparencyActivity: Activity(){
                 0.7,
                 0.0,
                 0.0,
+                0.0,
                 Color.WHITE.toColor()
             )
 
@@ -319,6 +387,7 @@ class TransparencyActivity: Activity(){
                 Vertex(-60.0, 40.0, 0.0),
                 0.3,
                 0.7,
+                0.0,
                 0.0,
                 0.0,
                 Color.WHITE.toColor()
@@ -332,6 +401,7 @@ class TransparencyActivity: Activity(){
                 0.7,
                 0.0,
                 0.0,
+                0.0,
                 Color.WHITE.toColor()
             )
 
@@ -341,6 +411,7 @@ class TransparencyActivity: Activity(){
                 Vertex(-60.0, -40.0, 0.0),
                 0.3,
                 0.7,
+                0.0,
                 0.0,
                 0.0,
                 Color.WHITE.toColor()
@@ -354,55 +425,169 @@ class TransparencyActivity: Activity(){
                 0.7,
                 0.0,
                 0.0,
+                0.0,
                 Color.WHITE.toColor()
             )
 
-            val s1 = Sphere(
-                Vertex(20.0, 10.0, 95.0),
-                20,
+            // Box
+            val t13 = Triangle(
+                Vertex(-10.0, -10.0, 60.0),
+                Vertex(-30.0, -10.0, 60.0),
+                Vertex(-30.0, 10.0, 60.0),
                 0.2,
-                0.3,
-                0.5,
+                0.8,
+                0.0,
                 0.0,
                 0.0,
                 Color.BLUE.toColor()
             )
 
-            val s2 = Sphere(
-                Vertex(-10.0, -5.0, 40.0),
-                10,
+            val t14 = Triangle(
+                Vertex(-10.0, -10.0, 60.0),
+                Vertex(-30.0, 10.0, 60.0),
+                Vertex(-10.0, 10.0, 60.0),
                 0.2,
+                0.8,
+                0.0,
+                0.0,
+                0.0,
+                Color.BLUE.toColor()
+            )
+
+            val t15 = Triangle(
+                Vertex(-10.0, -10.0, 80.0),
+                Vertex(-30.0, 10.0, 60.0),
+                Vertex(-30.0, -10.0, 80.0),
+                0.2,
+                0.8,
+                0.0,
+                0.0,
+                0.0,
+                Color.BLUE.toColor()
+            )
+
+            val t16 = Triangle(
+                Vertex(-10.0, -10.0, 80.0),
+                Vertex(-10.0, 10.0, 80.0),
+                Vertex(-30.0, 10.0, 80.0),
+                0.2,
+                0.8,
+                0.0,
+                0.0,
+                0.0,
+                Color.BLUE.toColor()
+            )
+
+            val t17 = Triangle(
+                Vertex(-10.0, 10.0, 60.0),
+                Vertex(-30.0, 10.0, 60.0),
+                Vertex(-10.0, 10.0, 80.0),
+                0.2,
+                0.8,
+                0.0,
+                0.0,
+                0.0,
+                Color.BLUE.toColor()
+            )
+
+            val t18 = Triangle(
+                Vertex(-30.0, 10.0, 80.0),
+                Vertex(-10.0, 10.0, 80.0),
+                Vertex(-30.0, 10.0, 60.0),
+                0.2,
+                0.8,
+                0.0,
+                0.0,
+                0.0,
+                Color.BLUE.toColor()
+            )
+
+            val t19 = Triangle(
+                Vertex(-30.0, -10.0, 60.0),
+                Vertex(-10.0, -10.0, 80.0),
+                Vertex(-10.0, -10.0, 60.0),
+                0.6,
+                0.4,
+                0.0,
+                0.0,
+                0.0,
+                Color.BLUE.toColor()
+            )
+
+            val t20 = Triangle(
+                Vertex(-30.0, -10.0, 80.0),
+                Vertex(-10.0, -10.0, 80.0),
+                Vertex(-30.0, -10.0, 60.0),
+                0.6,
+                0.4,
+                0.0,
+                0.0,
+                0.0,
+                Color.BLUE.toColor()
+            )
+
+            val t21 = Triangle(
+                Vertex(-10.0, 10.0, 80.0),
+                Vertex(-10.0, 10.0, 60.0),
+                Vertex(-10.0, -10.0, 60.0),
+                0.2,
+                0.8,
+                0.0,
+                0.0,
+                0.0,
+                Color.BLUE.toColor()
+            )
+
+            val t22 = Triangle(
+                Vertex(-10.0, 10.0, 80.0),
+                Vertex(-10.0, -10.0, 60.0),
+                Vertex(-10.0, -10.0, 80.0),
+                0.2,
+                0.8,
+                0.0,
+                0.0,
+                0.0,
+                Color.BLUE.toColor()
+            )
+
+            val t23 = Triangle(
+                Vertex(-30.0, 10.0, 80.0),
+                Vertex(-30.0, -10.0, 60.0),
+                Vertex(-30.0, 10.0, 60.0),
+                0.2,
+                0.8,
+                0.0,
+                0.0,
+                0.0,
+                Color.BLUE.toColor()
+            )
+
+            val t24 = Triangle(
+                Vertex(-30.0, 10.0, 80.0),
+                Vertex(-30.0, -10.0, 80.0),
+                Vertex(-30.0, -10.0, 60.0),
+                0.2,
+                0.8,
+                0.0,
+                0.0,
+                0.0,
+                Color.BLUE.toColor()
+            )
+
+            val s1 = Sphere(
+                Vertex(30.0, 15.0, 90.0),
+                10,
                 0.3,
-                0.5,
+                0.3,
+                0.4,
+                0.0,
                 0.0,
                 0.0,
                 Color.RED.toColor()
             )
 
-            val s3 = Sphere(
-                Vertex(5.0, -25.0, 80.0),
-                15,
-                0.2,
-                0.3,
-                0.5,
-                0.0,
-                0.0,
-                Color.YELLOW.toColor()
-            )
-
-            val s4 = Sphere(
-                Vertex(10.0, 0.0, 30.0),
-                10,
-                0.1,
-                0.1,
-                0.0,
-                0.0,
-                0.8,
-                Color.WHITE.toColor()
-            )
-
-            val shapes = arrayListOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12,
-                s1, s2, s3, s4)
+            val shapes = arrayListOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15,
+                t16, t17, t18, t19, t20, t21, t22, t23, t24, s1)
 
             val camera = Vertex(0.0, 0.0, 0.0)
 
