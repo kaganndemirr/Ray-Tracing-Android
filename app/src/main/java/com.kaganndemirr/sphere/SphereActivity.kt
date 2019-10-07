@@ -1,5 +1,6 @@
-package com.kaganndemirr.raytracing
+package com.kaganndemirr.sphere
 
+import android.app.Activity
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,14 +9,15 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.core.graphics.toColor
 
+import com.kaganndemirr.raytracing.R
 
-class TriangleActivity : AppCompatActivity() {
+class SphereActivity: Activity(){
 
     private fun traceRay(ro: Vertex, rd: Vertex, shapes: ArrayList<Shape>): Color {
         val intersection = Intersection()
         val intersections: ArrayList<Intersection> = ArrayList()
 
-        for(i in 0 until 3)
+        for(i in 0 until 1)
         {
             val t = shapes[i].intersect(ro, rd)
 
@@ -50,37 +52,17 @@ class TriangleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_triangle)
+        setContentView(R.layout.activity_sphere)
 
-        val renderTButton: Button = findViewById(R.id.renderTButton)
-        val rtTImageView: ImageView = findViewById(R.id.rtImageView)
+        val sphereRenderButton: Button = findViewById(R.id.sphereRenderButton)
+        val sphereImageView: ImageView = findViewById(R.id.sphereImageView)
 
-        renderTButton.setOnClickListener {
+        sphereRenderButton.setOnClickListener {
             val surface: Bitmap = Bitmap.createBitmap(800, 450, Bitmap.Config.ARGB_8888)
-            rtTImageView.setImageBitmap(surface)
+            sphereImageView.setImageBitmap(surface)
 
-
-            val t1 = Triangle(
-                Vertex(0.0, 30.0, 40.0),
-                Vertex(40.0, -30.0, 120.0),
-                Vertex(-40.0, -30.0, 120.0),
-                Color.BLUE.toColor()
-            )
-            val t2 = Triangle(
-                Vertex(-50.0, 30.0, 124.0),
-                Vertex(50.0, 30.0, 124.0),
-                Vertex(0.0, -30.0, 44.0),
-                Color.RED.toColor()
-            )
-            val t3 = Triangle(
-                Vertex(-30.0, 0.0, 37.0),
-                Vertex(30.0, 40.0, 117.0),
-                Vertex(30.0, -40.0, 117.0),
-                Color.GREEN.toColor()
-            )
-
-            val shapes = arrayListOf<Shape>(t1, t2, t3)
-
+            val s = Sphere(Vertex(0.0, 0.0, 200.0), 75.0, Color.BLUE.toColor())
+            val shapes = arrayListOf<Shape>(s)
             val camera = Vertex(0.0, 0.0, 0.0)
 
             for (y in 0 until 450) {
@@ -90,10 +72,7 @@ class TriangleActivity : AppCompatActivity() {
                     val c = traceRay(camera, rd, shapes)
                     surface.setPixel(x, y, c.toArgb())
                 }
-                rtTImageView.invalidate()
             }
-
         }
     }
 }
-

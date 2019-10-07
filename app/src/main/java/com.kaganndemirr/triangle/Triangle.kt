@@ -1,4 +1,4 @@
-package com.kaganndemirr.raytracing
+package com.kaganndemirr.triangle
 
 import android.graphics.Color
 

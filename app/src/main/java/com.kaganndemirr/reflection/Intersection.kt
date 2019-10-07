@@ -1,4 +1,4 @@
-package com.kaganndemirr.raytracing
+package com.kaganndemirr.reflection
 
 class Intersection {
     var distance: Double = 0.0

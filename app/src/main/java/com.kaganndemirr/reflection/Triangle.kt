@@ -1,10 +1,10 @@
-package com.kaganndemirr.raytracing
+package com.kaganndemirr.reflection
 
 import android.graphics.Color
 
 import kotlin.math.abs
 
-class ReflectionTriangle: ReflectionShape
+class Triangle: Shape
 {
     private val v0: Vertex
     private val v1: Vertex

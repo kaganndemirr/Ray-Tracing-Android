@@ -1,8 +1,8 @@
-package com.kaganndemirr.raytracing
+package com.kaganndemirr.sphere
 
 import kotlin.math.sqrt
 
-class Vertex(public var x: Double, public var y: Double, private var z: Double) {
+class Vertex(private var x: Double, private var y: Double, private var z: Double) {
 
     fun normalize(): Vertex {
         val length = sqrt(x * x + y * y + z * z)
@@ -38,9 +38,5 @@ class Vertex(public var x: Double, public var y: Double, private var z: Double) 
 
     operator fun div(d: Double): Vertex {
         return Vertex(x / d, y / d, z / d)
-    }
-
-    fun  mul(d: Double): Vertex{
-        return Vertex(x * d, y * d, z * d)
     }
 }
