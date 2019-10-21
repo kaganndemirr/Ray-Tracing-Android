@@ -171,22 +171,18 @@ class ShadowActivity: Activity(){
             }
         }
 
-        if (intersections.size > 0) {
+        return if (intersections.size > 0) {
             var minDistance = Double.MAX_VALUE
-            var minIndices = -1
 
             for (i in 0 until intersections.size) {
                 if (intersections[i].distance < minDistance) {
-                    minIndices = intersections[i].indices
                     minDistance = intersections[i].distance
                 }
             }
 
-            return minDistance < (light - iPoint).length()
-        }
-
-        else
-            return false
+            minDistance < (light - iPoint).length()
+        } else
+            false
     }
 
     private fun traceRay(ro: Vertex, rd: Vertex, shapes: ArrayList<Shape>, camera: Vertex,

@@ -2,11 +2,11 @@ package com.kaganndemirr.triangle
 
 import android.app.Activity
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.graphics.Color
-import android.provider.ContactsContract
-import android.widget.Button
+import android.graphics.Point
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.toColor
@@ -20,7 +20,7 @@ class TriangleActivity : Activity() {
         val intersection = Intersection()
         val intersections: ArrayList<Intersection> = ArrayList()
 
-        for(i in 0 until 3)
+        for(i in 0 until shapes.size)
         {
             val t = shapes[i].intersect(ro, rd)
 
@@ -55,16 +55,26 @@ class TriangleActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // No Status Bar, No Action Bar
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_triangle)
 
-        val renderTriangleButton: Button = findViewById(R.id.triangleRenderButton)
         val triangleImageView: ImageView = findViewById(R.id.triangleImageView)
         val elapsedTimeTextView = findViewById<TextView>(R.id.elapsedTimeTextView)
 
-        renderTriangleButton.setOnClickListener {
+        // Get Device Screen Size in Pixels
+        val size = Point()
+        val display = windowManager.defaultDisplay
+        display.getSize(size)
+        val width = size.x
+        val height = size.y
+
+        triangleImageView.setOnClickListener {
             val startTime = System.currentTimeMillis()
 
-            val surface: Bitmap = Bitmap.createBitmap(800, 450, Bitmap.Config.ARGB_8888)
+            val surface: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             triangleImageView.setImageBitmap(surface)
 
 
@@ -91,9 +101,9 @@ class TriangleActivity : Activity() {
 
             val camera = Vertex(0.0, 0.0, 0.0)
 
-            for (y in 0 until 450) {
-                for (x in 0 until 800) {
-                    val pixel = Vertex(16 * x / 799.0 - 8, 4.5 - y * 9 / 449.0, 10.0)
+            for (x in 0 until width) {
+                for (y in 0 until height) {
+                    val pixel = Vertex(9 * y / (height - 1).toDouble() - 4.5, 9 - x * 18 / (width - 1).toDouble(), 10.0)
                     val rd = (pixel - camera).normalize()
                     val c = traceRay(camera, rd, shapes)
                     surface.setPixel(x, y, c.toArgb())

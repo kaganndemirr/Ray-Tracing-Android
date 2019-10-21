@@ -139,9 +139,7 @@ class TransparencyActivity: Activity(){
         return (rd - normal * (normal * rd) * 2.0).normalize()
     }
 
-    private fun calculateTransmission(s: Shape, iPoint: Vertex, rd: Vertex): Vertex{
-        return rd
-    }
+    private fun calculateTransmission(rd: Vertex): Vertex = rd
 
     private fun traceRay(ro: Vertex, rd: Vertex, shapes: ArrayList<Shape>, camera: Vertex,
                          depth: Int, prevShape: Shape?): Color {
@@ -186,7 +184,7 @@ class TransparencyActivity: Activity(){
 
             var transmittedColor = Color.BLACK.toColor()
             if (s.transmitted != 0.0) {
-                val transmittedDirection = calculateTransmission(s, iPoint, rd)
+                val transmittedDirection = calculateTransmission(rd)
                 transmittedColor =
                     traceRay(iPoint, transmittedDirection, shapes, camera, depth + 1, s)
             }
