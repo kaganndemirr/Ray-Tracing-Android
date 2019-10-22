@@ -1,17 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<manifest package="com.kaganndemirr.raytracing" xmlns:dist="http://schemas.android.com/apk/distribution" xmlns:android="http://schemas.android.com/apk/res/android">
-    <dist:module dist:instant="true"/>
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    package="com.kaganndemirr.raytracing">
+
+    <dist:module dist:instant="true" />
+
     <application>
-        <activity android:name="com.kaganndemirr.raytracing.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.kaganndemirr.triangle.TriangleActivity"></activity>
-        <activity android:name="com.kaganndemirr.sphere.SphereActivity"></activity>
-        <activity android:name="com.kaganndemirr.reflection.ReflectionActivity"></activity>
-        <activity android:name="com.kaganndemirr.transparency.TransparencyActivity"></activity>
-        <activity android:name="com.kaganndemirr.shadow.ShadowActivity"></activity>
+        <activity android:name="com.kaganndemirr.raytracing.triangle.TriangleActivity" />
+        <activity android:name="com.kaganndemirr.raytracing.sphere.SphereActivity" />
+        <activity android:name="com.kaganndemirr.raytracing.reflection.ReflectionActivity" />
+        <activity android:name="com.kaganndemirr.raytracing.transparency.TransparencyActivity" />
+        <activity android:name="com.kaganndemirr.raytracing.shadow.ShadowActivity" />
     </application>
+
 </manifest>

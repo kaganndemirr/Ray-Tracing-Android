@@ -6,23 +6,15 @@
 
     <ImageView
         android:id="@+id/reflectionImageView"
-        android:layout_width="800px"
-        android:layout_height="450px"
-        android:layout_centerHorizontal="true"/>
-
-    <Button
-        android:id="@+id/reflectionRenderButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Render"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:clickable="true"/>
 
     <TextView
         android:id="@+id/elapsedTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/reflectionRenderButton"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>
 </RelativeLayout>
