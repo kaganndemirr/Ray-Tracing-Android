@@ -13,11 +13,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.kaganndemirr.triangle.TriangleActivity" />
-        <activity android:name="com.kaganndemirr.sphere.SphereActivity" />
-        <activity android:name="com.kaganndemirr.reflection.ReflectionActivity" />
-        <activity android:name="com.kaganndemirr.transparency.TransparencyActivity" />
-        <activity android:name="com.kaganndemirr.shadow.ShadowActivity" />
+        <activity android:name="com.kaganndemirr.raytracing.triangle.TriangleActivity" />
+        <activity android:name="com.kaganndemirr.raytracing.sphere.SphereActivity" />
+        <activity android:name="com.kaganndemirr.raytracing.reflection.ReflectionActivity" />
+        <activity android:name="com.kaganndemirr.raytracing.transparency.TransparencyActivity" />
+        <activity android:name="com.kaganndemirr.raytracing.shadow.ShadowActivity" />
     </application>
 
 </manifest>
