@@ -13,11 +13,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.kaganndemirr.raytracing.triangle.TriangleActivity" />
-        <activity android:name="com.kaganndemirr.raytracing.sphere.SphereActivity" />
-        <activity android:name="com.kaganndemirr.raytracing.reflection.ReflectionActivity" />
-        <activity android:name="com.kaganndemirr.raytracing.transparency.TransparencyActivity" />
-        <activity android:name="com.kaganndemirr.raytracing.shadow.ShadowActivity" />
+        <activity
+            android:name=".triangle.TriangleActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".sphere.SphereActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".reflection.ReflectionActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".transparency.TransparencyActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".shadow.ShadowActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".refraction.RefractionActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

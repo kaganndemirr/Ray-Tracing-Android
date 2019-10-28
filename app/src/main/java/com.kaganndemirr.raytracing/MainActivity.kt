@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.kaganndemirr.raytracing.sphere.SphereActivity
 import com.kaganndemirr.raytracing.triangle.TriangleActivity
 import com.kaganndemirr.raytracing.reflection.ReflectionActivity
+import com.kaganndemirr.raytracing.refraction.RefractionActivity
 import com.kaganndemirr.raytracing.shadow.ShadowActivity
 import com.kaganndemirr.raytracing.transparency.TransparencyActivity
 
@@ -31,6 +32,7 @@ class MainActivity : Activity() {
         val sphereButton = findViewById<Button>(R.id.sphereButton)
         val reflectionButton = findViewById<Button>(R.id.reflectionButton)
         val transparencyButton = findViewById<Button>(R.id.transparencyButton)
+        val refractionButton = findViewById<Button>(R.id.refractionButton)
         val shadowButton = findViewById<Button>(R.id.shadowButton)
 
 
@@ -48,6 +50,11 @@ class MainActivity : Activity() {
 
         reflectionButton.setOnClickListener {
             val intent = Intent(this, ReflectionActivity::class.java)
+            startActivity(intent)
+        }
+
+        refractionButton.setOnClickListener {
+            val intent = Intent(this, RefractionActivity::class.java)
             startActivity(intent)
         }
 

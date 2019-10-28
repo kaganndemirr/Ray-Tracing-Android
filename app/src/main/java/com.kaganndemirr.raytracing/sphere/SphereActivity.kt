@@ -4,11 +4,8 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.graphics.Color
-import android.graphics.Point
 import android.graphics.Typeface
-import android.view.View
 import android.view.Window
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.toColor
@@ -58,32 +55,25 @@ class SphereActivity: Activity(){
         super.onCreate(savedInstanceState)
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         setContentView(R.layout.activity_sphere)
 
         val sphereImageView: ImageView = findViewById(R.id.sphereImageView)
         val elapsedTimeTextView = findViewById<TextView>(R.id.elapsedTimeTextView)
 
-        val display = windowManager.defaultDisplay
-        val size = Point()
-        display.getSize(size)
-        val width = size.x
-        val height = size.y
-
         sphereImageView.setOnClickListener {
             val startTime = System.currentTimeMillis()
 
-            val surface: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val surface: Bitmap = Bitmap.createBitmap(1600, 900, Bitmap.Config.ARGB_8888)
             sphereImageView.setImageBitmap(surface)
 
             val s = Sphere(Vertex(0.0, 0.0, 200.0), 75.0, Color.BLUE.toColor())
             val shapes = arrayListOf<Shape>(s)
             val camera = Vertex(0.0, 0.0, 0.0)
 
-            for (x in 0 until width) {
-                for (y in 0 until height) {
-                    val pixel = Vertex(19 * y / (height - 1).toDouble() - 9.5, 4.5 - x * 9 / (width - 1).toDouble(), 10.0)
+            for (y in 0 until 900) {
+                for (x in 0 until 1600) {
+                    val pixel = Vertex(16.0 * x / 1599.0 - 8.0, 4.5 - y * 9.0 / 899.0, 10.0)
                     val rd = (pixel - camera).normalize()
                     val c = traceRay(camera, rd, shapes)
                     surface.setPixel(x, y, c.toArgb())

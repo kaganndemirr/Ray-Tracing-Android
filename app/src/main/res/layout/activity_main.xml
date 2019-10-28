@@ -8,7 +8,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@id/triangleButton"/>
+        android:layout_above="@id/triangleButton"
+        android:textColor="@android:color/black"
+        android:textSize="28sp"/>
 
     <Button
         android:id="@+id/triangleButton"
@@ -41,12 +43,19 @@
         android:text="Transparency"
         android:layout_below="@id/reflectionButton"
         android:layout_centerHorizontal="true"/>
+    <Button
+        android:id="@+id/refractionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refraction"
+        android:layout_below="@+id/transparencyButton"
+        android:layout_centerHorizontal="true"/>
 
     <Button
         android:id="@+id/shadowButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Shadow"
-        android:layout_below="@id/transparencyButton"
+        android:layout_below="@id/refractionButton"
         android:layout_centerHorizontal="true"/>
 </RelativeLayout>
